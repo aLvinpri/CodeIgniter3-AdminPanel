@@ -19,10 +19,10 @@ class Auth extends CI_Controller
     // $this->form_validation->set_rules('password', 'Password', 'trim|required');
 
     // if ($this->form_validation->run() == false) {
-    //     $data['title'] = 'Login Page';
-    //     $this->load->view('templates/auth_header', $data);
-    $this->load->view('auth/login');
-    //     $this->load->view('templates/auth_footer');
+        $data['title'] = 'Login Page';
+        $this->load->view('templates/auth_header', $data);
+        $this->load->view('auth/login');
+        $this->load->view('templates/auth_footer');
     // } else {
     //     // validasinya success
     //     $this->_login();
@@ -68,8 +68,8 @@ class Auth extends CI_Controller
   // }
 
 
-  // public function registration()
-  // {
+  public function registration()
+  {
   //     if ($this->session->userdata('email')) {
   //         redirect('user');
   //     }
@@ -85,10 +85,10 @@ class Auth extends CI_Controller
   //     $this->form_validation->set_rules('password2', 'Password', 'required|trim|matches[password1]');
 
   //     if ($this->form_validation->run() == false) {
-  //         $data['title'] = 'WPU User Registration';
-  //         $this->load->view('templates/auth_header', $data);
-  //         $this->load->view('auth/registration');
-  //         $this->load->view('templates/auth_footer');
+          $data['title'] = 'User Registration';
+          $this->load->view('templates/auth_header', $data);
+          $this->load->view('auth/registration');
+          $this->load->view('templates/auth_footer');
   //     } else {
   //         $email = $this->input->post('email', true);
   //         $data = [
@@ -117,7 +117,7 @@ class Auth extends CI_Controller
   //         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Congratulation! your account has been created. Please activate your account</div>');
   //         redirect('auth');
   //     }
-  // }
+  }
 
 
   // private function _sendEmail($token, $type)
