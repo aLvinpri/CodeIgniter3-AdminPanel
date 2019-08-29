@@ -14,7 +14,7 @@
 
 
             <!-- QUERY MENU -->
-            <?php 
+            <?php
             $role_id = $this->session->userdata('role_id');
             $queryMenu = "SELECT `user_menu`.`id`, `menu`
                             FROM `user_menu` JOIN `user_access_menu`
@@ -33,16 +33,16 @@
             </div>
 
             <!-- SIAPKAN SUB-MENU SESUAI MENU -->
-            <?php 
-            $menuId = $m['id'];
-            $querySubMenu = "SELECT *
+            <?php
+                $menuId = $m['id'];
+                $querySubMenu = "SELECT *
                                FROM `user_sub_menu` JOIN `user_menu` 
                                  ON `user_sub_menu`.`menu_id` = `user_menu`.`id`
                               WHERE `user_sub_menu`.`menu_id` = $menuId
                                 AND `user_sub_menu`.`is_active` = 1
                         ";
-            $subMenu = $this->db->query($querySubMenu)->result_array();
-            ?>
+                $subMenu = $this->db->query($querySubMenu)->result_array();
+                ?>
 
             <?php foreach ($subMenu as $sm) : ?>
             <?php if ($title == $sm['title']) : ?>
@@ -76,4 +76,4 @@
             </div>
 
         </ul>
-        <!-- End  of Sidebar --> 
+        <!-- End  of Sidebar -->
