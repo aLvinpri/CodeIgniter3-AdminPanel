@@ -44,32 +44,32 @@
 
   <!-- LOOPING MENU -->
   <?php foreach ($menu as $m) : ?>
-  <div class="sidebar-heading">
-    <!-- Menampilkan Nama menu -->
-    <?= $m['menu']; ?>
-  </div>
+    <div class="sidebar-heading">
+      <!-- Menampilkan Nama menu -->
+      <?= $m['menu']; ?>
+    </div>
 
-  <!-- SIAPKAN SUB-MENU SESUAI MENU -->
-  <?php
-    // 1. Cara dengan JOIN
-    // $menuId = $m['menu_id'];
-    // $querySubMenu = "SELECT * 
-    //                   FROM `user_submenu` JOIN `user_menu` 
-    //                     ON `user_submenu`.`menu_id` = `user_menu`.`menu_id`
-    //                   WHERE `user_submenu`.`menu_id` = $menuId
-    //                   AND `user_submenu`.`is_active` = 1
-    //                 ";
-    // $subMenu = $this->db->query($querySubMenu)->result_array();
+    <!-- SIAPKAN SUB-MENU SESUAI MENU -->
+    <?php
+      // 1. Cara dengan JOIN
+      // $menuId = $m['menu_id'];
+      // $querySubMenu = "SELECT * 
+      //                   FROM `user_submenu` JOIN `user_menu` 
+      //                     ON `user_submenu`.`menu_id` = `user_menu`.`menu_id`
+      //                   WHERE `user_submenu`.`menu_id` = $menuId
+      //                   AND `user_submenu`.`is_active` = 1
+      //                 ";
+      // $subMenu = $this->db->query($querySubMenu)->result_array();
 
-    // 2. Cara dengan SQL biasa
-    $querySubMenu = "SELECT * FROM `user_submenu`
+      // 2. Cara dengan SQL biasa
+      $querySubMenu = "SELECT * FROM `user_submenu`
                       WHERE `menu_id` = {$m['menu_id']}
                       AND `is_active` = 1
                     ";
-    $subMenu = $this->db->query($querySubMenu)->result_array();
-    ?>
+      $subMenu = $this->db->query($querySubMenu)->result_array();
+      ?>
 
-  <!-- CARA MEMBACA QUERY JOIN DI ATAS ******************************************
+    <!-- CARA MEMBACA QUERY JOIN DI ATAS ******************************************
   
   1. Cara pertama dengan JOIN
 
@@ -84,43 +84,43 @@
 
   *************************************************************************** -->
 
-  <!-- Nav-Items -->
-  <?php foreach ($subMenu as $sm) : ?>
-  
-  <!-- Jika nav item di klik maka beri class active -->
-  <?php if ($title == $sm['title']) : ?>
+    <!-- Nav-Items -->
+    <?php foreach ($subMenu as $sm) : ?>
 
-  <!-- Nav-Items -->
-  <li class="nav-item active">
-    <?php else : ?>
-  <li class="nav-item">
-    <?php endif; ?>
+      <!-- Jika nav item di klik maka beri class active -->
+      <?php if ($title == $sm['title']) : ?>
 
-    <a class="nav-link pb-0" href="<?= base_url($sm['url']); ?>">
-      <i class="<?= $sm['icon']; ?>"></i>
-      <span><?= $sm['title']; ?></span></a>
-  </li>
+        <!-- Nav-Items -->
+        <li class="nav-item active">
+        <?php else : ?>
+        <li class="nav-item">
+        <?php endif; ?>
 
-  <?php endforeach; ?>
+        <a class="nav-link pb-0" href="<?= base_url($sm['url']); ?>">
+          <i class="<?= $sm['icon']; ?>"></i>
+          <span><?= $sm['title']; ?></span></a>
+        </li>
 
-  <!-- Divider -->
-  <hr class="sidebar-divider mt-3">
+      <?php endforeach; ?>
 
-  <?php endforeach; ?>
+      <!-- Divider -->
+      <hr class="sidebar-divider mt-4">
 
-  <li class="nav-item">
-    <a class="nav-link" href="<?= base_url('auth/logout'); ?>" data-toggle="modal" data-target="#logoutModal">
-      <i class="fas fa-fw fa-sign-out-alt"></i>
-      <span>Logout</span></a>
-  </li>
+    <?php endforeach; ?>
 
-  <!-- Divider -->
-  <hr class="sidebar-divider d-none d-md-block">
+    <li class="nav-item">
+      <a class="nav-link" href="<?= base_url('auth/logout'); ?>" data-toggle="modal" data-target="#logoutModal">
+        <i class="fas fa-fw fa-sign-out-alt"></i>
+        <span>Logout</span></a>
+    </li>
 
-  <!-- Sidebar Toggler (Sidebar) -->
-  <div class="text-center d-none d-md-inline">
-    <button class="rounded-circle border-0" id="sidebarToggle"></button>
-  </div>
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+      <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
 
 </ul>
 <!-- End of Sidebar -->
