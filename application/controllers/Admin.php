@@ -6,6 +6,13 @@ class Admin extends CI_Controller
   public function __construct()
   {
     parent::__construct();
+    // validasi session login
+    // Cara pertama :
+    if (!$this->session->userdata('email')) {
+      redirect('auth');
+    }
+
+    // Cara kedua memakai function helper :
     // is_logged_in();
   }
 
