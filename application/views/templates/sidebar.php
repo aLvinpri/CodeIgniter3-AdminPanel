@@ -84,7 +84,10 @@
 
   *************************************************************************** -->
 
+  <!-- Nav-Items -->
   <?php foreach ($subMenu as $sm) : ?>
+  
+  <!-- Jika nav item di klik maka beri class active -->
   <?php if ($title == $sm['title']) : ?>
 
   <!-- Nav-Items -->
@@ -92,6 +95,7 @@
     <?php else : ?>
   <li class="nav-item">
     <?php endif; ?>
+
     <a class="nav-link pb-0" href="<?= base_url($sm['url']); ?>">
       <i class="<?= $sm['icon']; ?>"></i>
       <span><?= $sm['title']; ?></span></a>
