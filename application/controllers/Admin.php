@@ -30,34 +30,34 @@ class Admin extends CI_Controller
 
   public function role()
   {
-    // $data['title'] = 'Role';
-    // $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+    $data['title'] = 'Role';
+    $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
-    // $data['role'] = $this->db->get('user_role')->result_array();
+    $data['role'] = $this->db->get('user_role')->result_array();
 
-    // $this->load->view('templates/header', $data);
-    // $this->load->view('templates/sidebar', $data);
-    // $this->load->view('templates/topbar', $data);
-    // $this->load->view('admin/role', $data);
-    // $this->load->view('templates/footer');
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/sidebar', $data);
+    $this->load->view('templates/topbar', $data);
+    $this->load->view('admin/role', $data);
+    $this->load->view('templates/footer');
   }
 
 
   public function roleAccess($role_id)
   {
-    // $data['title'] = 'Role Access';
-    // $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+    $data['title'] = 'Role Access';
+    $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
-    // $data['role'] = $this->db->get_where('user_role', ['id' => $role_id])->row_array();
+    $data['role'] = $this->db->get_where('user_role', ['role_id' => $role_id])->row_array();
 
-    // $this->db->where('id !=', 1);
-    // $data['menu'] = $this->db->get('user_menu')->result_array();
+    $this->db->where('menu_id !=', 1);
+    $data['menu'] = $this->db->get('user_menu')->result_array();
 
-    // $this->load->view('templates/header', $data);
-    // $this->load->view('templates/sidebar', $data);
-    // $this->load->view('templates/topbar', $data);
-    // $this->load->view('admin/role-access', $data);
-    // $this->load->view('templates/footer');
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/sidebar', $data);
+    $this->load->view('templates/topbar', $data);
+    $this->load->view('admin/role-access', $data);
+    $this->load->view('templates/footer');
   }
 
 
