@@ -28,11 +28,18 @@ function is_logged_in()
 
 function check_access($role_id, $menu_id)
 {
-  $userLogin = get_instance();
+  $userCheck = get_instance();
 
-  $userLogin->db->where('role_id', $role_id);
-  $userLogin->db->where('menu_id', $menu_id);
-  $result = $userLogin->db->get('user_access_menu');
+  // Cara pertama :
+  // $userCheck->db->where('role_id', $role_id);
+  // $userCheck->db->where('menu_id', $menu_id);
+  // $result = $userCheck->db->get('user_accessmenu');
+
+  // Cara kedua :
+  $result = $userCheck->db->get_where('user_accessmenu', [
+    'role_id' => $role_id,
+    'menu_id' => $menu_id
+  ]);
 
   if ($result->num_rows() > 0) {
     return "checked='checked'";
