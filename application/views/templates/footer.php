@@ -49,13 +49,13 @@
 <script src="<?= base_url('assets/'); ?>js/sb-admin-2.min.js"></script>
 
 <script>
+  // Script untuk mengganti tulisan choose file dari input type file bootstrap
   $('.custom-file-input').on('change', function() {
     let fileName = $(this).val().split('\\').pop();
     $(this).next('.custom-file-label').addClass("selected").html(fileName);
   });
 
-
-
+  // Script AJAX untuk mengedit access role user
   $('.form-check-input').on('click', function() {
     const menuId = $(this).data('menu');
     const roleId = $(this).data('role');
