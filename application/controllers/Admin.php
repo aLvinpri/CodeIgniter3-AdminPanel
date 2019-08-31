@@ -8,12 +8,11 @@ class Admin extends CI_Controller
     parent::__construct();
     // validasi session login
     // Cara pertama :
-    if (!$this->session->userdata('email')) {
-      redirect('auth');
-    }
+    // if (!$this->session->userdata('email')) {
+    //   redirect('auth');
 
     // Cara kedua memakai function helper :
-    // is_logged_in();
+    is_logged_in();
   }
 
   public function index()
