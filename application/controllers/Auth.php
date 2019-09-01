@@ -103,18 +103,20 @@ class Auth extends CI_Controller
         'date_created' => time()
       ];
 
-      //         // siapkan token
-      //         $token = base64_encode(random_bytes(32));
-      //         $user_token = [
-      //             'email' => $email,
-      //             'token' => $token,
-      //             'date_created' => time()
-      //         ];
+              // siapkan token untuk verifikasi account user
+              // function base64_encode dan random_bytes adalah fungsi dari PHP
+              $token = base64_encode(random_bytes(32));
+              // data user_token untuk diinput kedalam db table user_token
+              $user_token = [
+                  'email' => $email,
+                  'token' => $token,
+                  'date_created' => time()
+              ];
 
       $this->db->insert('user', $data);
-      //         $this->db->insert('user_token', $user_token);
+      $this->db->insert('user_token', $user_token);
 
-      //         $this->_sendEmail($token, 'verify');
+      $this->_sendEmail($token, 'verify');
 
       $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Congratulation! your account has been created. Please activate your account</div>');
       redirect('auth');
@@ -122,39 +124,43 @@ class Auth extends CI_Controller
   }
 
 
-  // private function _sendEmail($token, $type)
-  // {
-  //     $config = [
-  //         'protocol'  => 'smtp',
-  //         'smtp_host' => 'ssl://smtp.googlemail.com',
-  //         'smtp_user' => 'wpunpas@gmail.com',
-  //         'smtp_pass' => '1234567890',
-  //         'smtp_port' => 465,
-  //         'mailtype'  => 'html',
-  //         'charset'   => 'utf-8',
-  //         'newline'   => "\r\n"
-  //     ];
+  private function _sendEmail($token, $type)
+  {
+    // Configuration ada di user guide codeigniter
+      $config = [
+          'protocol'  => 'smtp',
+          'smtp_host' => 'ssl://smtp.googlemail.com', // ssl punya gmail.com //
+          'smtp_user' => 'wpunpas@gmail.com', // masukan email admin yang akan mengirim pesan verifikasi akun ke email user //
+          'smtp_pass' => '1234567890', // password email admin  //
+          'smtp_port' => 465, // port smtp google //
+          'mailtype'  => 'html', // dikarenakan ada code html di dalam pesan email yang akan dikirim ke user //
+          'charset'   => 'utf-8',
+          'newline'   => "\r\n"
+      ];
 
-  //     $this->email->initialize($config);
+      // Cara pertama, load library email codeigniter
+      $this->load->library('email', $config);
 
-  //     $this->email->from('wpunpas@gmail.com', 'Web Programming UNPAS');
-  //     $this->email->to($this->input->post('email'));
+      // $this->email->initialize($config);
 
-  //     if ($type == 'verify') {
-  //         $this->email->subject('Account Verification');
-  //         $this->email->message('Click this link to verify you account : <a href="' . base_url() . 'auth/verify?email=' . $this->input->post('email') . '&token=' . urlencode($token) . '">Activate</a>');
-  //     } else if ($type == 'forgot') {
-  //         $this->email->subject('Reset Password');
-  //         $this->email->message('Click this link to reset your password : <a href="' . base_url() . 'auth/resetpassword?email=' . $this->input->post('email') . '&token=' . urlencode($token) . '">Reset Password</a>');
-  //     }
+      $this->email->from('wpunpas@gmail.com', 'Web Programming UNPAS');
+      $this->email->to($this->input->post('email'));
 
-  //     if ($this->email->send()) {
-  //         return true;
-  //     } else {
-  //         echo $this->email->print_debugger();
-  //         die;
-  //     }
-  // }
+      // if ($type == 'verify') {
+          $this->email->subject('Account Verification');
+          $this->email->message('Click this link to verify you account : <a href="' . base_url() . 'auth/verify?email=' . $this->input->post('email') . '&token=' . urlencode($token) . '">Activate</a>');
+      // } else if ($type == 'forgot') {
+      //     $this->email->subject('Reset Password');
+      //     $this->email->message('Click this link to reset your password : <a href="' . base_url() . 'auth/resetpassword?email=' . $this->input->post('email') . '&token=' . urlencode($token) . '">Reset Password</a>');
+      // }
+
+      if ($this->email->send()) {
+          return true;
+      } else {
+          echo $this->email->print_debugger();
+          die;
+      }
+  }
 
 
   // public function verify()
