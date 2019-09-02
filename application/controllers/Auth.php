@@ -103,15 +103,15 @@ class Auth extends CI_Controller
         'date_created' => time()
       ];
 
-              // siapkan token untuk verifikasi account user
-              // function base64_encode dan random_bytes adalah fungsi dari PHP
-              $token = base64_encode(random_bytes(32));
-              // data user_token untuk diinput kedalam db table user_token
-              $user_token = [
-                  'email' => $email,
-                  'token' => $token,
-                  'date_created' => time()
-              ];
+      // siapkan token untuk verifikasi account user
+      // function base64_encode dan random_bytes adalah fungsi dari PHP
+      $token = base64_encode(random_bytes(34));
+      // data user_token untuk diinput kedalam db table user_token
+      $user_token = [
+        'email' => $email,
+        'token' => $token,
+        'date_created' => time()
+      ];
 
       $this->db->insert('user', $data);
       $this->db->insert('user_token', $user_token);
@@ -127,85 +127,87 @@ class Auth extends CI_Controller
   private function _sendEmail($token, $type)
   {
     // Configuration ada di user guide codeigniter
-      $config = [
-          'protocol'  => 'smtp',
-          'smtp_host' => 'ssl://smtp.googlemail.com', // ssl punya gmail.com //
-          'smtp_user' => 'wpunpas@gmail.com', // masukan email admin yang akan mengirim pesan verifikasi akun ke email user //
-          'smtp_pass' => '1234567890', // password email admin  //
-          'smtp_port' => 465, // port smtp google //
-          'mailtype'  => 'html', // dikarenakan ada code html di dalam pesan email yang akan dikirim ke user //
-          'charset'   => 'utf-8',
-          'newline'   => "\r\n"
-      ];
+    // Nonaktifkan less secure apps access (Akses aplikasi yang kurang aman) di gmail pengirim
+    $config = [
+      'protocol'  => 'smtp',
+      'smtp_host' => 'ssl://smtp.googlemail.com', // ssl punya gmail.com //
+      'smtp_user' => 'alvhient@gmail.com', // masukan email admin yang akan mengirim pesan verifikasi akun ke email user //
+      'smtp_pass' => '26019090', // password email admin  //
+      'smtp_port' => 465, // port smtp google //
+      'mailtype'  => 'html', // dikarenakan ada code html di dalam pesan email yang akan dikirim ke user //
+      'charset'   => 'utf-8',
+      'newline'   => "\r\n"
+    ];
 
-      // Cara pertama, load library email codeigniter
-      $this->load->library('email', $config);
+    // Cara pertama, load library email codeigniter
+    //$this->load->library('email', $config);
 
-      // $this->email->initialize($config);
+    // Cara kedua, load library email codeigniter
+    $this->email->initialize($config);
 
-      $this->email->from('wpunpas@gmail.com', 'Web Programming UNPAS');
-      $this->email->to($this->input->post('email'));
+    $this->email->from('donot@reply.mail', 'admin');
+    $this->email->to($this->input->post('email'));
 
-      if ($type == 'verify') {
-          $this->email->subject('Account Verification');
-          $this->email->message('Click this link to verify you account : <a href="' . base_url() . 'auth/verify?email=' . $this->input->post('email') . '&token=' . urlencode($token) . '">Activate</a>');
-      } else if ($type == 'forgot') {
-          $this->email->subject('Reset Password');
-          $this->email->message('Click this link to reset your password : <a href="' . base_url() . 'auth/resetpassword?email=' . $this->input->post('email') . '&token=' . urlencode($token) . '">Reset Password</a>');
-      }
+    if ($type == 'verify') {
+      $this->email->subject('Account Verification');
+      $this->email->message('Click this link to verify you account : <a href="' . base_url() . 'auth/verify?email=' . $this->input->post('email') . '&token=' . urlencode($token) . '">Activate</a>');
+    } else if ($type == 'forgot') {
+      $this->email->subject('Reset Password');
+      $this->email->message('Click this link to reset your password : <a href="' . base_url() . 'auth/resetpassword?email=' . $this->input->post('email') . '&token=' . urlencode($token) . '">Reset Password</a>');
+    }
 
-      if ($this->email->send()) {
-          return true;
-      } else {
-          echo $this->email->print_debugger();
-          die;
-      }
+    if ($this->email->send()) {
+      return true;
+    } else {
+      echo $this->email->print_debugger();
+      die;
+    }
   }
 
 
   public function verify()
   {
-      $email = $this->input->get('email');
-      $token = $this->input->get('token');
+    $email = $this->input->get('email');
+    $token = $this->input->get('token');
 
-      // Pastikan email user valid
-      $user = $this->db->get_where('user', ['email' => $email])->row_array();
+    // Pastikan email user valid
+    $user = $this->db->get_where('user', ['email' => $email])->row_array();
 
-        // 1a. Cek jika email valid
-      if ($user) {
-          $user_token = $this->db->get_where('user_token', ['token' => $token])->row_array();
+    // 1a. Cek jika email valid
+    if ($user) {
+      $user_token = $this->db->get_where('user_token', ['token' => $token])->row_array();
 
-            // 2a. Cek jika user_token valid
-          if ($user_token) {
-            // 3a. Cek user_token not expired
-              if (time() - $user_token['date_created'] < (60 * 60 * 24)) {
-                // Aktivasi akun
-                  $this->db->set('is_active', 1);
-                  $this->db->where('email', $email);
-                  $this->db->update('user');
+      // 2a. Cek jika user_token valid
+      if ($user_token) {
+        // 3a. Cek user_token not expired
+        if (time() - $user_token['date_created'] < (60 * 60 * 24)) {
+          // Aktivasi akun
+          $this->db->set('is_active', 1);
+          $this->db->where('email', $email);
+          $this->db->update('user');
 
-                  $this->db->delete('user_token', ['email' => $email]);
+          $this->db->delete('user_token', ['email' => $email]);
 
-                  $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">' . $email . ' has been activated! Please login.</div>');
-                  redirect('auth');
-              } else {
-                // 3a. Cek user_token expired
-                  $this->db->delete('user', ['email' => $email]);
-                  $this->db->delete('user_token', ['email' => $email]);
-
-                  $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Account activation failed! Token expired.</div>');
-                  redirect('auth');
-              }
-          } else {
-             // 2b. Cek jika user_token tidak valid
-              $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Account activation failed! Wrong token.</div>');
-              redirect('auth');
-          }
-      } else {
-         // 1b. Cek jika email tidak valid
-          $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Account activation failed! Wrong email.</div>');
+          $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">' . $email . ' has been activated! Please login.</div>');
           redirect('auth');
+        } else {
+          // 3a. Cek user_token expired
+          $this->db->delete('user', ['email' => $email]);
+          $this->db->delete('user_token', ['email' => $email]);
+
+          $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Account activation failed! Token expired.</div>');
+          redirect('auth');
+        }
+      } else {
+        // 2b. Cek jika user_token tidak valid
+        $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Account activation failed! Wrong token.</div>');
+        redirect('auth');
       }
+    } else {
+      // 1b. Cek jika email tidak valid
+      $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Account activation failed! Wrong email.</div>');
+      redirect('auth');
+    }
   }
 
 
